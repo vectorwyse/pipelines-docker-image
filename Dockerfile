@@ -15,11 +15,14 @@ RUN set -xe \
         openssh-client \
         nodejs \
         npm \
+        xvfb \
         chromium \
+        chromium-chromedriver \
     && docker-php-ext-install \
         exif \
         zip \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --version $COMPOSER_VERSION
 
+RUN Xvfb -ac :0 -screen 0 1280x1024x16 &
 CMD ["-"]
 ENTRYPOINT ["composer", "--ansi"]
