@@ -25,7 +25,7 @@ RUN set -xe \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --version $COMPOSER_VERSION
 
 RUN npm install -g n
-RUN n latest
+RUN n 16
 
 RUN Xvfb -ac :0 -screen 0 1280x1024x16 &
 CMD ["-"]
