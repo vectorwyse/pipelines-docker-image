@@ -1,4 +1,4 @@
-FROM prooph/php:8.1-cli
+FROM prooph/php:8.2-cli
 
 ENV COMPOSER_HOME /root/composer
 ENV COMPOSER_VERSION 2.0.14
