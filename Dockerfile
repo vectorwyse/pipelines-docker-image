@@ -1,4 +1,11 @@
+FROM node:22-alpine AS node
 FROM prooph/php:8.2-cli
+
+COPY --from=node /usr/lib /usr/lib
+COPY --from=node /usr/local/share /usr/local/share
+COPY --from=node /usr/local/lib /usr/local/lib
+COPY --from=node /usr/local/include /usr/local/include
+COPY --from=node /usr/local/bin /usr/local/bin
 
 ENV COMPOSER_HOME /root/composer
 ENV COMPOSER_VERSION 2.0.14
@@ -15,8 +22,6 @@ RUN set -xe \
         unzip \
         openssh-client \
         bash \
-        nodejs \
-        npm \
         xvfb \
         chromium \
         chromium-chromedriver \
@@ -28,9 +33,6 @@ RUN set -xe \
         exif \
         zip \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --version $COMPOSER_VERSION
-
-RUN npm install -g n
-RUN n 22
 
 RUN Xvfb -ac :0 -screen 0 1280x1024x16 &
 CMD ["-"]
