@@ -24,6 +24,10 @@ RUN set -xe \
     && apk add --no-cache --virtual .persistent-deps-composer \
         zlib-dev \
         libzip-dev \
+        icu-dev \
+        libpng-dev \
+        libjpeg-turbo-dev \
+        freetype-dev \
         git \
         unzip \
         openssh-client \
@@ -36,9 +40,12 @@ RUN set -xe \
     && pecl install imagick \
     && docker-php-ext-enable imagick \
     && apk del .build-deps \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install \
         exif \
         zip \
+        intl \
+        gd \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --version $COMPOSER_VERSION
 
 RUN Xvfb -ac :0 -screen 0 1280x1024x16 &
