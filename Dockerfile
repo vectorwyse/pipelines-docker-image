@@ -1,5 +1,5 @@
-FROM node:22-alpine AS node
-FROM prooph/php:8.2-cli
+FROM node:22-alpine3.21 AS node
+FROM php:8.3-cli-alpine3.21
 
 COPY --from=node /usr/lib /usr/lib
 COPY --from=node /usr/local/share /usr/local/share
@@ -14,7 +14,13 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 ENV PUPPETEER_EXECUTABLE_PATH /usr/bin/chromium-browser
 
 RUN set -xe \
-    && apk add --no-cache php82-pecl-imagick --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
+    && apk add --no-cache php83-pecl-imagick --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
+    && apk add --no-cache --virtual .build-deps \
+        autoconf \
+        automake \
+        g++ \
+        make \
+        libtool \
     && apk add --no-cache --virtual .persistent-deps-composer \
         zlib-dev \
         libzip-dev \
@@ -29,6 +35,7 @@ RUN set -xe \
         imagemagick-dev \
     && pecl install imagick \
     && docker-php-ext-enable imagick \
+    && apk del .build-deps \
     && docker-php-ext-install \
         exif \
         zip \
