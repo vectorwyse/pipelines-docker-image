@@ -13,8 +13,6 @@ ENV COMPOSER_ALLOW_SUPERUSER 1
 
 RUN set -xe \
     && apk add --no-cache --virtual .build-deps \
-        autoconf \
-        automake \
         g++ \
         make \
         libtool \
@@ -22,6 +20,8 @@ RUN set -xe \
         libjpeg-turbo-dev \
         freetype-dev \
     && apk add --no-cache --virtual .persistent-deps-composer \
+        autoconf \
+        automake \
         zlib-dev \
         libzip-dev \
         icu-dev \
