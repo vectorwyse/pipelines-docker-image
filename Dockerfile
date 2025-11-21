@@ -18,6 +18,9 @@ RUN set -xe \
         g++ \
         make \
         libtool \
+        libpng-dev \
+        libjpeg-turbo-dev \
+        freetype-dev \
     && apk add --no-cache --virtual .persistent-deps-composer \
         zlib-dev \
         libzip-dev \
@@ -31,11 +34,18 @@ RUN set -xe \
         grep \
         findutils \
         curl \
-    && apk del .build-deps \
+        libpng \
+        libjpeg-turbo \
+        freetype \
+    && docker-php-ext-configure gd \
+        --with-freetype-dir=/usr/include/ \
+        --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install \
         exif \
         zip \
         intl \
+        gd \
+    && apk del .build-deps \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --version $COMPOSER_VERSION
 
 RUN Xvfb -ac :0 -screen 0 1280x1024x16 &
