@@ -12,31 +12,29 @@ ENV COMPOSER_VERSION 2.0.14
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
 RUN set -xe \
-    && apk add --no-cache --virtual .build-deps \
-        g++ \
-        make \
-        libtool \
-        libpng-dev \
-        libjpeg-turbo-dev \
-        freetype-dev \
     && apk add --no-cache --virtual .persistent-deps-composer \
         autoconf \
         automake \
+        g++ \
+        make \
+        libtool \
+        nasm \
+        file \
+        rsync \
         zlib-dev \
         libzip-dev \
         icu-dev \
+        libpng-dev \
+        libjpeg-turbo-dev \
+        freetype-dev \
         git \
         unzip \
         openssh-client \
         bash \
         xvfb \
-        cpio \
         grep \
         findutils \
         curl \
-        libpng \
-        libjpeg-turbo \
-        freetype \
     && docker-php-ext-configure gd \
         --with-freetype-dir=/usr/include/ \
         --with-jpeg-dir=/usr/include/ \
@@ -45,7 +43,6 @@ RUN set -xe \
         zip \
         intl \
         gd \
-    && apk del .build-deps \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --version $COMPOSER_VERSION
 
 RUN Xvfb -ac :0 -screen 0 1280x1024x16 &
